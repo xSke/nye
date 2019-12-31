@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <h1>New Year Scheduler</h1>
+
+    <input type="url" id="yt" placeholder="Enter YouTube URL here" />
+
+    <div>
+        <strong>Timestamp to hit on NYE (mm:ss):</strong>
+        <input type="number" id="ms" placeholder="mm" />
+        :
+        <input type="number" id="ss" placeholder="ss" />
+    </div>
+
+    <div>
+        <input type="button" id="doit" value="Schedule!" />
+    </div>
+
+    <div id="player"></div>
+
+    <script>
+        var tag = document.createElement('script');
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+
+        function tick() {
+            if (player == null) return;
+
+            var secsOffset = parseInt(document.getElementById("ms").value) * 60 + parseInt(document.getElementById("ss").value);
+
+            var currentDate = new Date();
+
+            // var target = new Date(2020, 1, 1, 0, 0, 0);
+            var target = new Date(2019, 11, 31, 23, 15, 0);
+            console.log(target);
+            var millisUntilNY = (+target) - Date.now();
+
+            if (millisUntilNY > secsOffset * 1000) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+                var playerPos = player.getCurrentTime();
+                var timeToSeekTo = (secsOffset * 1000 - millisUntilNY) / 1000;
+
+                if (player.getPlayerState() !== 3 && Math.abs(playerPos - timeToSeekTo) > 1)
+                    player.seekTo(timeToSeekTo + 0.5, true);
+            }
+            // console.log(player);
+            // console.log(millisUntilNY);
+        }
+
+        setInterval(tick, 100);
+
+        function onYouTubeIframeAPIReady() {
+            document.getElementById("doit").addEventListener("click", () => {
+                var url = document.getElementById("yt").value;
+                if (!url) {
+                    alert("You gotta enter a valid YouTube URL");
+                    return;
+                }
+                var ytId = url.split("?v=")[1].split("&")[0];
+                if (!ytId) {
+                    alert("You gotta enter a valid YouTube URL");
+                    return;
+                }
+
+                player = new YT.Player("player", {
+                    width: "854",
+                    height: "480",
+                    videoId: ytId,
+                    events: {
+                        // onReady,
+                        // onStateChange
+                    }
+                })
+            });
+        }
+    </script>
+</body>
+
+</html>
