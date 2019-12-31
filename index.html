@@ -23,6 +23,8 @@
 
     <div id="player"></div>
 
+    <div id="displayed"></div>
+
     <script>
         var tag = document.createElement('script');
 
@@ -39,8 +41,8 @@
 
             var currentDate = new Date();
 
-            // var target = new Date(2020, 1, 1, 0, 0, 0);
-            var target = new Date(2019, 11, 31, 23, 15, 0);
+            var target = new Date(2020, 0, 1, 0, 0, 0);
+            // var target = new Date(2019, 11, 31, 23, 15, 0);
             console.log(target);
             var millisUntilNY = (+target) - Date.now();
 
