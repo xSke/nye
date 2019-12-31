@@ -43,7 +43,7 @@
 
             var target = new Date(2020, 0, 1, 0, 0, 0);
             // var target = new Date(2019, 11, 31, 23, 15, 0);
-            console.log(target);
+            // console.log(target);
             var millisUntilNY = (+target) - Date.now();
 
             if (millisUntilNY > secsOffset * 1000) {
@@ -64,6 +64,8 @@
 
         function onYouTubeIframeAPIReady() {
             document.getElementById("doit").addEventListener("click", () => {
+                if (player) player.destroy();
+                
                 var url = document.getElementById("yt").value;
                 if (!url) {
                     alert("You gotta enter a valid YouTube URL");
@@ -72,6 +74,13 @@
                 var ytId = url.split("?v=")[1].split("&")[0];
                 if (!ytId) {
                     alert("You gotta enter a valid YouTube URL");
+                    return;
+                }
+
+                var secsOffset = parseInt(document.getElementById("ms").value) * 60 + parseInt(document.getElementById("ss").value);
+                console.log(secsOffset);
+                if (!secsOffset) {
+                    alert("You gotta add minutes and seconds, doof");
                     return;
                 }
 
